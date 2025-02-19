@@ -32,16 +32,22 @@ export const useGridStore = defineStore('grid', {
     },
 
     canAffordBuilding(building) {
+      if (!this.buildingCosts[building]) {
+        console.log(`❌ Le bâtiment "${building}" n'a pas de coût défini !`);
+        return false;
+      }
+    
       const cost = this.buildingCosts[building];
       const resourceStore = useResourceStore();
-
+    
       return (
-        resourceStore.wood >= cost.wood &&
-        resourceStore.stone >= cost.stone &&
-        resourceStore.food >= cost.food &&
-        resourceStore.gold >= cost.gold
+        resourceStore.wood >= (cost.wood || 0) &&
+        resourceStore.stone >= (cost.stone || 0) &&
+        resourceStore.food >= (cost.food || 0) &&
+        resourceStore.gold >= (cost.gold || 0)
       );
     },
+    
 
     payForBuilding(building) {
       const cost = this.buildingCosts[building];
