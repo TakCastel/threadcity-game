@@ -16,13 +16,28 @@
     <button v-for="building in buildings[activeMenu]" :key="building.type"
             @click="selectBuilding(building.type)"
             class="submenu-button"
-            :class="{ 'opacity-50': !canAfford(building.type) }">
+            :class="{ 'opacity-50 cursor-not-allowed': !canAfford(building.type) }">
       <Icon :name="building.icon" style="color: black; font-size: 20px;" />
       <div class="text-xs text-gray-700 mt-1">
-        <span v-if="costs[building.type].wood">🌲 {{ costs[building.type].wood }}</span>
-        <span v-if="costs[building.type].stone">🪨 {{ costs[building.type].stone }}</span>
-        <span v-if="costs[building.type].food">🍞 {{ costs[building.type].food }}</span>
-        <span v-if="costs[building.type].gold">💰 {{ costs[building.type].gold }}</span>
+        <div class="text-xs text-gray-700 mt-1 flex items-center space-x-1">
+          <span v-if="costs[building.type].wood" class="flex items-center">
+            <Icon name="fluent-emoji-high-contrast:wood" style="font-size: 12px;" />
+            {{ costs[building.type].wood }}
+          </span>
+          <span v-if="costs[building.type].stone" class="flex items-center">
+            <Icon name="fluent-emoji-high-contrast:rock" style="font-size: 12px;" />
+            {{ costs[building.type].stone }}
+          </span>
+          <span v-if="costs[building.type].food" class="flex items-center">
+            <Icon name="fluent-emoji-high-contrast:ear-of-corn" style="font-size: 12px;" />
+            {{ costs[building.type].food }}
+          </span>
+          <span v-if="costs[building.type].gold" class="flex items-center">
+            <Icon name="fluent-emoji-high-contrast:coin" style="font-size: 12px;" />
+            {{ costs[building.type].gold }}
+          </span>
+        </div>
+
       </div>
     </button>
   </div>
@@ -119,7 +134,7 @@ const selectBuilding = (type) => {
 .submenu {
   position: fixed;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   background: white;
   padding: 8px;
   border-radius: 8px;
