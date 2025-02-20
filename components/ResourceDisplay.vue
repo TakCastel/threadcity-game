@@ -24,6 +24,25 @@
       <Icon name="fluent-emoji:coin" style="font-size: 24px;" />
       <span>{{ resourceStore.gold }}</span>
     </div>
+
+    <!-- 📌 Affichage du score -->
+    <div class="absolute top-16 -left-4 text-white text-lg">
+      Score : {{ formattedScore }}
+    </div>
+
+    <!-- 📌 Affichage du bonheur -->
+    <div class="absolute top-24 -left-4 text-white text-lg">
+      Bonheur : {{ resourceStore.happiness }}
+    </div>
+  </div>
+
+  <!-- 🚨 GAME OVER - MODALE BLOQUANTE -->
+  <div v-if="resourceStore.gameOver" class="game-over-modal">
+    <div class="game-over-content">
+      <p class="text-xl">GAME OVER</p>
+      <p class="text-md">Total : {{ resourceStore.finalScore }}</p>
+      <button @click="restartGame">Recommencer</button>
+    </div>
   </div>
 </template>
 
@@ -50,6 +69,16 @@ const increasing = ref({
   manufacturedGoods: false, 
   luxuryGoods: false 
 });
+
+// 📌 Formate le score avec des zéros devant (ex: "0000123")
+const formattedScore = computed(() => {
+  return resourceStore.score.toString().padStart(10, "0");
+});
+
+const restartGame = () => {
+  localStorage.clear(); // Supprime toutes les données stockées
+  window.location.reload(); // Recharge la page
+};
 
 // 📌 Détecte une diminution ou augmentation des ressources et active l'animation
 const trackResourceChange = (resource) => {
@@ -78,6 +107,22 @@ const triggerAnimation = (animationType, resource) => {
 /* 📌 Animation clignotement rouge */
 .resource-decrease {
   animation: flash-red 0.5s ease-out;
+}
+
+/* 🚨 MODALE GAME OVER - Bloque tout l'écran */
+.game-over-modal {
+  @apply fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center ml-0;
+  z-index: 50;
+}
+
+/* 🚨 Contenu du Game Over */
+.game-over-content {
+  @apply text-white font-bold text-center p-10 bg-gray-800 rounded-lg shadow-xl;
+}
+
+/* 🔄 Bouton de redémarrage */
+.game-over-content button {
+  @apply mt-6 bg-white text-black px-6 py-3 rounded-lg transition hover:bg-gray-300;
 }
 
 /* 📌 Animation clignotement vert */

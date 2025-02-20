@@ -9,12 +9,17 @@ export const useResourceStore = defineStore('resources', {
     gold: 0,
     manufacturedGoods: 0, // ⚙️ Produits manufacturés
     luxuryGoods: 0, // 👜 Produits de luxe
+    score: 0, // 🔢 Score du joueur
+    finalScore: null, // 🎯 Score figé en cas de Game Over
+    happiness: 100, // Bonheur de la ville
+    gameOver: false, // 🚨 Indique si le jeu est perdu
   }),
 
   actions: {
     addResource(type, amount) {
       if (this[type] !== undefined) {
         this[type] += amount;
+        this.incrementScore(amount); // ✅ Ajoute au score
         this.saveResources();
       }
     },
@@ -23,6 +28,23 @@ export const useResourceStore = defineStore('resources', {
       if (this[type] !== undefined) {
         this[type] = Math.max(0, this[type] - amount); // 🔹 Bloque à 0 au lieu de négatif
         this.saveResources();
+      }
+    },
+
+    incrementScore(amount) {
+      this.score += amount;
+    },
+
+    updateHappiness() {
+      if (this.food === 0) {
+        this.happiness = Math.max(0, this.happiness - 1);
+        console.log(`😢 Bonheur réduit à ${this.happiness}`);
+        
+        if (this.happiness === 0) {
+          this.finalScore = this.score; // 🔹 Fige le score
+          this.gameOver = true;
+          console.log("💀 GAME OVER !");
+        }
       }
     },
 
@@ -40,6 +62,7 @@ export const useResourceStore = defineStore('resources', {
     startEconomy() {
       setInterval(() => {
         this.updateEconomy();
+        this.updateHappiness();
       }, 10000); // 🔄 Mise à jour toutes les 5 secondes
     },
 
