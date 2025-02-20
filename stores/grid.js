@@ -10,13 +10,16 @@ export const useGridStore = defineStore('grid', {
      // 📌 Mise à jour des coûts de construction
      buildingCosts : {
       house: { wood: 5, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 0 },      
-      lotissements: { wood: 15, stone: 0, food: 0, gold: 0, luxuryGoods: 5, manufacturedGoods: 0 },
-      building: { wood: 0, stone: 5, food: 0, gold: 0, luxuryGoods: 10, manufacturedGoods: 25 },
+      lotissements: { wood: 10, stone: 0, food: 0, gold: 0, luxuryGoods: 6, manufacturedGoods: 0 },
+      building: { wood: 20, stone: 6, food: 0, gold: 0, luxuryGoods: 12, manufacturedGoods: 15 },
+
       seed: { wood: 0, stone: 0, food: 0, gold: 2, luxuryGoods: 0, manufacturedGoods: 0 },      
-      sapling: { wood: 0, stone: 0, food: 0, gold: 5, luxuryGoods: 0, manufacturedGoods: 0 },   
-      factory: { wood: 15, stone: 0, food: 0, gold: 15, luxuryGoods: 0, manufacturedGoods: 0 },   
-      industries: { wood: 10, stone: 0, food: 0, gold: 30, luxuryGoods: 0, manufacturedGoods: 15 },
-      market: { wood: 25, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 10 },    
+      sapling: { wood: 0, stone: 0, food: 0, gold: 5, luxuryGoods: 0, manufacturedGoods: 0 },  
+
+      factory: { wood: 25, stone: 0, food: 0, gold: 5, luxuryGoods: 0, manufacturedGoods: 0 },   
+      industries: { wood: 50, stone: 0, food: 0, gold: 100, luxuryGoods: 0, manufacturedGoods: 18 },
+
+      market: { wood: 10, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 6 },    
     }
   }),
 

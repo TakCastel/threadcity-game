@@ -3,7 +3,7 @@ import { useGridStore } from '@/stores/grid'; // 🔹 Import du store de la gril
 
 export const useResourceStore = defineStore('resources', {
   state: () => ({
-    wood: 25,
+    wood: 20,
     stone: 0,
     food: 100,
     gold: 0,
@@ -40,7 +40,7 @@ export const useResourceStore = defineStore('resources', {
     startEconomy() {
       setInterval(() => {
         this.updateEconomy();
-      }, 5000); // 🔄 Mise à jour toutes les 5 secondes
+      }, 10000); // 🔄 Mise à jour toutes les 5 secondes
     },
 
     updateEconomy() {
@@ -67,31 +67,28 @@ export const useResourceStore = defineStore('resources', {
       // 📌 Appliquer les effets économiques
     
       // 🏠 **Maisons** → +1 💰 Or / -1 🌽 Nourriture
-      this.addResource("gold", buildingsCount.house * 2);
+      this.addResource("gold", buildingsCount.house * 1);
       this.removeResource("food", buildingsCount.house * 1);
     
       // 🏘️ **Lotissements** → +5 💰 Or / -2 🌽 Nourriture
-      this.addResource("gold", buildingsCount.lotissements * 4);
-      this.removeResource("food", buildingsCount.lotissements * 2);
-      this.removeResource("luxuryGoods", buildingsCount.lotissements * 1);
+      this.addResource("gold", buildingsCount.lotissements * 2);
+      this.removeResource("food", buildingsCount.lotissements * 1);
     
       // 🏢 **Immeubles** → +10 💰 Or / -4 🌽 Nourriture
       this.addResource("gold", buildingsCount.building * 8);
       this.removeResource("food", buildingsCount.building * 4);
-      this.removeResource("luxuryGoods", buildingsCount.lotissements * 2);
     
       // 🏭 **Usines** → +3 ⚙️ Produits Manufacturés / -1 💰 Or
-      this.addResource("manufacturedGoods", buildingsCount.factory * 4);
-      this.removeResource("gold", buildingsCount.factory * 2);
+      this.addResource("manufacturedGoods", buildingsCount.factory * 1);
+      this.removeResource("gold", buildingsCount.factory * 1);
     
       // 🏗️ **Industries** → +3 🪨 Pierre / -5 ⚙️ Produits Manufacturés
       this.addResource("stone", buildingsCount.industries * 1);
-      this.addResource("wood", buildingsCount.industries * 5);
-      this.removeResource("manufacturedGoods", buildingsCount.industries * 10);
+      this.addResource("wood", buildingsCount.industries * 2);
+      this.removeResource("gold", buildingsCount.industries * 2);
     
       // 🏪 **Magasins** → +3 💰 Or / -1 👜 Produits de Luxe
       this.addResource("luxuryGoods", buildingsCount.market * 1);
-      this.removeResource("manufacturedGoods", buildingsCount.market * 1);
       this.removeResource("gold", buildingsCount.market * 1);
     
       // 📌 Affichage du log en console pour voir l'évolution de l'économie
