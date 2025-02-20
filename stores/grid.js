@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { useResourceStore } from '@/stores/resources'; // 🔹 Ajout de l'import
 
 export const useGridStore = defineStore('grid', {
   state: () => ({
@@ -8,7 +9,7 @@ export const useGridStore = defineStore('grid', {
 
      // 📌 Mise à jour des coûts de construction
      buildingCosts: {
-      hut: { wood: 3, stone: 0, food: 0, gold: 0 },      // 🛖 3 bois
+      house: { wood: 3, stone: 0, food: 0, gold: 0 },      // 🛖 3 bois
       seed: { wood: 0, stone: 0, food: 0, gold: 1 },      // 🌱 1 or
       sapling: { wood: 0, stone: 0, food: 0, gold: 3 },   // 🌿 3 or
       factory: { wood: 5, stone: 0, food: 0, gold: 0 },   // 🏭 5 bois
@@ -47,7 +48,65 @@ export const useGridStore = defineStore('grid', {
         resourceStore.gold >= (cost.gold || 0)
       );
     },
+
+    // 🌱 Planter et gérer la croissance
+    plantGrowth(x, y, type) {
+      const index = y * this.size + x;
+
+      if (type === "sapling") {
+        console.log("🌿 Pousse plantée, deviendra un arbre dans 10 secondes...");
+        setTimeout(() => {
+          if (this.world[index].item === "sapling") {
+            this.world[index].item = "tree"; // 🌳 Transformation en arbre
+            this.saveWorld();
+            console.log("🌳 La pousse est devenue un arbre !");
+          }
+        }, 10000);
+      }
+
+      if (type === "seed") {
+        console.log("🌱 Graine plantée, deviendra un champ de blé dans 5 secondes...");
+        setTimeout(() => {
+          if (this.world[index].item === "seed") {
+            this.world[index].item = "wheat-field"; // 🌾 Transformation en champ
+            this.saveWorld();
+            console.log("🌾 La graine est devenue un champ de blé !");
+          }
+        }, 5000);
+      }
+    },
     
+    // 🌲 Récolter un arbre et récupérer du bois
+    harvestTree(x, y) {
+      const index = y * this.size + x;
+      const resourceStore = useResourceStore();
+
+      const treeRewards = {
+        pine: 3, // 🌲 Sapin → 3 bois
+        tree: 5, // 🌳 Arbre → 5 bois
+        palm: 7, // 🌴 Palmier → 7 bois
+      };
+
+      const treeType = this.world[index].item;
+
+      if (treeRewards[treeType]) {
+        resourceStore.addResource("wood", treeRewards[treeType]); // 🪓 Ajouter le bois
+        this.world[index].item = "empty"; // ❌ Supprime l’arbre
+        this.saveWorld();
+        console.log(`🌲 +${treeRewards[treeType]} bois récupérés !`);
+      }
+    },
+
+    // 🌲 Récolter du blé
+    harvestWheat(x, y) {
+      const index = y * this.size + x;
+      const resourceStore = useResourceStore();
+      
+      resourceStore.addResource("food", 10); // 🪓 Ajouter le bois
+      this.world[index].item = "empty"; // ❌ Supprime l’arbre
+      this.saveWorld();
+      console.log(`🌾 +10 nourriture récupérées !`);
+    },
 
     payForBuilding(building) {
       const cost = this.buildingCosts[building];
@@ -59,10 +118,9 @@ export const useGridStore = defineStore('grid', {
       resourceStore.removeResource("gold", cost.gold);
     },
 
-    // 🏗️ Placer un bâtiment si les ressources sont suffisantes
+    // 🏗️ Placer un bâtiment ou une plante
     placeBuilding(x, y) {
       const index = y * this.size + x;
-      const resourceStore = useResourceStore();
 
       if (!this.selectedBuilding) return;
       if (this.world[index].terrain === "water") {
@@ -75,13 +133,56 @@ export const useGridStore = defineStore('grid', {
       }
       if (!this.canAffordBuilding(this.selectedBuilding)) {
         console.log("❌ Pas assez de ressources !");
+        this.selectedBuilding = null;
         return;
       }
 
       this.payForBuilding(this.selectedBuilding); // 🔹 Retirer les ressources
       this.world[index].item = this.selectedBuilding;
-      this.selectedBuilding = null;
+      
+      // 🌱 Si c'est une plante, activer le cooldown de croissance
+      if (this.selectedBuilding === "sapling") {
+        this.world[index] = { ...this.world[index], cooldown: 60000 }; // 🌿 10 secondes avant de devenir un arbre
+      } else if (this.selectedBuilding === "seed") {
+        this.world[index] = { ...this.world[index], cooldown: 30000 }; // 🌾 5 secondes avant de devenir un champ de blé
+      }
+
       this.saveWorld();
+
+      // 🚀 Vérifie après placement si on peut encore construire ce bâtiment
+      if (!this.canAffordBuilding(this.selectedBuilding)) {
+        console.log("❌ Ressources épuisées, bâtiment désélectionné !");
+        this.selectedBuilding = null;
+      }
+    },
+
+    // 🔄 Met à jour le cooldown des plantes à chaque seconde
+    updateCooldown() {
+      this.world.forEach((cell) => {
+        if (cell.cooldown > 0) {
+          cell.cooldown--; // ⏳ Diminue le cooldown
+          
+          if (cell.cooldown === 0) {
+            // 🌱 Transformation des plantes
+            if (cell.item === "sapling") {
+              cell.item = "tree"; // 🌳 Transformation en arbre
+              console.log("🌳 Une pousse est devenue un arbre !");
+            } else if (cell.item === "seed") {
+              cell.item = "wheat-field"; // 🌾 Transformation en champ de blé
+              console.log("🌾 Une graine est devenue un champ de blé !");
+            }
+            this.saveWorld();
+          }
+        }
+      });
+    },
+
+    // ⏳ Lancer la mise à jour automatique du cooldown
+    startCooldownLoop() {
+      
+      setInterval(() => {
+        this.updateCooldown();
+      }, 1000); // 🔄 Mise à jour chaque seconde
     },
 
     // 🌎 Génération d'une nouvelle carte

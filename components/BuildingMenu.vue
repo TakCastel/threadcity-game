@@ -18,30 +18,36 @@
             class="submenu-button"
             :class="{ 'opacity-50 cursor-not-allowed': !canAfford(building.type) }">
       <Icon :name="building.icon" style="color: black; font-size: 20px;" />
-      <div class="text-xs text-gray-700 mt-1">
-        <div class="text-xs text-gray-700 mt-1 flex items-center space-x-1">
-          <span v-if="costs[building.type].wood" class="flex items-center">
-            <Icon name="fluent-emoji-high-contrast:wood" style="font-size: 12px;" />
-            {{ costs[building.type].wood }}
-          </span>
-          <span v-if="costs[building.type].stone" class="flex items-center">
-            <Icon name="fluent-emoji-high-contrast:rock" style="font-size: 12px;" />
-            {{ costs[building.type].stone }}
-          </span>
-          <span v-if="costs[building.type].food" class="flex items-center">
-            <Icon name="fluent-emoji-high-contrast:ear-of-corn" style="font-size: 12px;" />
-            {{ costs[building.type].food }}
-          </span>
-          <span v-if="costs[building.type].gold" class="flex items-center">
-            <Icon name="fluent-emoji-high-contrast:coin" style="font-size: 12px;" />
-            {{ costs[building.type].gold }}
-          </span>
+      <div class="text-xs text-gray-700 mt-1 flex flex-col space-y-1">
+        <div v-if="costs[building.type].wood" class="flex items-center space-x-1">
+          <Icon name="fluent-emoji:wood" style="font-size: 18px;" />
+          <span>{{ costs[building.type].wood }}</span>
         </div>
-
+        <div v-if="costs[building.type].stone" class="flex items-center space-x-1">
+          <Icon name="fluent-emoji:rock" style="font-size: 18px;" />
+          <span>{{ costs[building.type].stone }}</span>
+        </div>
+        <div v-if="costs[building.type].food" class="flex items-center space-x-1">
+          <Icon name="fluent-emoji:ear-of-corn" style="font-size: 18px;" />
+          <span>{{ costs[building.type].food }}</span>
+        </div>
+        <div v-if="costs[building.type].gold" class="flex items-center space-x-1">
+          <Icon name="fluent-emoji:coin" style="font-size: 18px;" />
+          <span>{{ costs[building.type].gold }}</span>
+        </div>
+        <div v-if="costs[building.type].manufacturedGoods" class="flex items-center space-x-1">
+          <Icon name="fluent-emoji:gear" style="font-size: 18px;" />
+          <span>{{ costs[building.type].manufacturedGoods }}</span>
+        </div>
+        <div v-if="costs[building.type].luxuryGoods" class="flex items-center space-x-1">
+          <Icon name="fluent-emoji:handbag" style="font-size: 18px;" />
+          <span>{{ costs[building.type].luxuryGoods }}</span>
+        </div>
       </div>
     </button>
   </div>
 </template>
+
 
 <script setup>
 import { ref, computed, nextTick } from 'vue';
@@ -62,7 +68,7 @@ const categories = [
 ];
 
 const buildings = {
-  residential: [{ type: 'hut', icon: 'fluent:home-24-regular' }],
+  residential: [{ type: 'house', icon: 'fluent:home-24-regular' }],
   industry: [
     { type: 'seed', icon: 'fluent:plant-grass-24-regular' },
     { type: 'sapling', icon: 'fluent:leaf-two-24-regular' },

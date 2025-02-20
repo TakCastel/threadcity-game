@@ -13,19 +13,22 @@
         class="relative flex items-center justify-center"
         :class="getTerrainClass(cell.terrain)"
         :style="{ width: `${cellSize}px`, height: `${cellSize}px` }"
-        @click="placeBuilding(index)"
+        @click="handleClick(index)"
       >
+        <!-- 🌱 Affichage des plantes en croissance -->
+        <Icon v-if="cell.item === 'sapling'" name="fluent-emoji:seedling" class="absolute w-3/4 h-3/4" />
+        <Icon v-if="cell.item === 'seed'" name="fluent-emoji:herb" class="absolute w-3/4 h-3/4" />
+
         <!-- Affichage des arbres -->
-        <Icon v-if="cell.item === 'tree'" name="fluent-emoji:deciduous-tree" class="absolute inset-0 w-full h-full" />
-        <Icon v-if="cell.item === 'palm'" name="fluent-emoji:palm-tree" class="absolute inset-0 w-full h-full" />
-        <Icon v-if="cell.item === 'pine'" name="fluent-emoji:evergreen-tree" class="absolute inset-0 w-full h-full" />
+        <Icon v-if="cell.item === 'tree'" name="fluent-emoji:deciduous-tree" class="absolute inset-0 w-full h-full cursor-pointer" />
+        <Icon v-if="cell.item === 'palm'" name="fluent-emoji:palm-tree" class="absolute inset-0 w-full h-full cursor-pointer" />
+        <Icon v-if="cell.item === 'pine'" name="fluent-emoji:evergreen-tree" class="absolute inset-0 w-full h-full cursor-pointer" />
+        <Icon v-if="cell.item === 'wheat-field'" name="fluent-emoji:sheaf-of-rice" class="absolute inset-0 w-full h-full cursor-pointer" />
         
         <!-- Affichage des bâtiments placés -->
-        <Icon v-if="cell.item === 'hut'" name="fluent-emoji:hut" class="absolute w-3/4 h-3/4" />
+        <Icon v-if="cell.item === 'house'" name="fluent-emoji:house" class="absolute w-3/4 h-3/4" />
         <Icon v-if="cell.item === 'factory'" name="fluent-emoji:factory" class="absolute w-full h-full" />
         <Icon v-if="cell.item === 'market'" name="fluent-color:building-store-20" class="absolute w-3/4 h-3/4" />
-        <Icon v-if="cell.item === 'seed'" name="fluent-emoji:seedling" class="absolute w-3/4 h-3/4" />
-        <Icon v-if="cell.item === 'sapling'" name="fluent-emoji:herb" class="absolute w-3/4 h-3/4" />
       </div>
     </div>
   </div>
@@ -36,13 +39,12 @@ import { useGridStore } from '@/stores/grid';
 import { useResourceStore } from '@/stores/resources';
 import { onMounted } from 'vue';
 
-
 const resourceStore = useResourceStore();
 
 onMounted(() => {
   resourceStore.loadResources(); // 📥 Récupère les ressources au chargement
+  resourceStore.startEconomy(); // 🔄 Lance l'économie dès le début
 });
-
 
 const gridStore = useGridStore();
 const cellSize = 50;
@@ -50,6 +52,7 @@ const cellSize = 50;
 // 📌 Charger le monde au démarrage
 onMounted(() => {
   gridStore.initWorld();
+  gridStore.startCooldownLoop(); // 🔄 Active la mise à jour automatique du cooldown
 });
 
 // 🎨 Couleurs des terrains (style Civ 3)
@@ -62,10 +65,23 @@ const getTerrainClass = (terrain) => {
   return styles[terrain] || "bg-gray-800";
 };
 
-const placeBuilding = (index) => {
+// 📌 Gestion du clic : soit on coupe un arbre, soit on place un bâtiment
+const handleClick = (index) => {
   const x = index % gridStore.size;
   const y = Math.floor(index / gridStore.size);
-  gridStore.placeBuilding(x, y);
+
+  const cell = gridStore.world[index];
+
+  // 🪓 Si c'est un arbre, on le coupe
+  if (["tree", "palm", "pine"].includes(cell.item)) {
+    gridStore.harvestTree(x, y);
+  }  else if (["wheat-field"].includes(cell.item)) {
+    gridStore.harvestWheat(x, y);
+  } 
+  // 🏗️ Sinon, on tente de construire
+  else {
+    gridStore.placeBuilding(x, y);
+  }
 };
 
 </script>
