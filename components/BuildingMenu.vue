@@ -20,27 +20,27 @@
       <Icon :name="building.icon" style="color: black; font-size: 20px;" />
       <div class="text-xs text-gray-700 mt-1 flex flex-col space-y-1">
         <div v-if="costs[building.type].wood" class="flex items-center space-x-1">
-          <Icon name="fluent-emoji:wood" style="font-size: 18px;" />
+          <Icon name="fluent-emoji:wood" style="font-size: 12px;" />
           <span>{{ costs[building.type].wood }}</span>
         </div>
         <div v-if="costs[building.type].stone" class="flex items-center space-x-1">
-          <Icon name="fluent-emoji:rock" style="font-size: 18px;" />
+          <Icon name="fluent-emoji:rock" style="font-size: 12px;" />
           <span>{{ costs[building.type].stone }}</span>
         </div>
         <div v-if="costs[building.type].food" class="flex items-center space-x-1">
-          <Icon name="fluent-emoji:ear-of-corn" style="font-size: 18px;" />
+          <Icon name="fluent-emoji:ear-of-corn" style="font-size: 12px;" />
           <span>{{ costs[building.type].food }}</span>
         </div>
         <div v-if="costs[building.type].gold" class="flex items-center space-x-1">
-          <Icon name="fluent-emoji:coin" style="font-size: 18px;" />
+          <Icon name="fluent-emoji:coin" style="font-size: 12px;" />
           <span>{{ costs[building.type].gold }}</span>
         </div>
         <div v-if="costs[building.type].manufacturedGoods" class="flex items-center space-x-1">
-          <Icon name="fluent-emoji:gear" style="font-size: 18px;" />
+          <Icon name="fluent-emoji:gear" style="font-size: 12px;" />
           <span>{{ costs[building.type].manufacturedGoods }}</span>
         </div>
         <div v-if="costs[building.type].luxuryGoods" class="flex items-center space-x-1">
-          <Icon name="fluent-emoji:handbag" style="font-size: 18px;" />
+          <Icon name="fluent-emoji:handbag" style="font-size: 12px;" />
           <span>{{ costs[building.type].luxuryGoods }}</span>
         </div>
       </div>
@@ -68,14 +68,21 @@ const categories = [
 ];
 
 const buildings = {
-  residential: [{ type: 'house', icon: 'fluent:home-24-regular' }],
-  industry: [
-    { type: 'seed', icon: 'fluent:plant-grass-24-regular' },
-    { type: 'sapling', icon: 'fluent:leaf-two-24-regular' },
-    { type: 'factory', icon: 'fluent:building-factory-24-regular' },
+  residential: [
+    { type: 'building', icon: 'fluent:city-24-regular' }, // Immeuble
+    { type: 'lotissements', icon: 'fluent:building-24-regular' }, // Lotissement / regroupement de bâtiments
+    { type: 'house', icon: 'fluent:home-24-regular' }, // Maison standard
   ],
-  commerce: [{ type: 'market', icon: 'fluent:cart-24-regular' }],
-};
+  industry: [
+    { type: 'seed', icon: 'fluent:plant-grass-24-regular' }, // Graine
+    { type: 'sapling', icon: 'fluent:leaf-two-24-regular' }, // Petite plante / pousse
+    { type: 'industries', icon: 'fluent:vehicle-truck-24-regular' }, // Industrie
+    { type: 'factory', icon: 'fluent:building-factory-24-regular' }, // Usine
+  ],
+  commerce: [
+    { type: 'market', icon: 'fluent:cart-24-regular' } // Magasin
+  ],
+}
 
 // 📌 Récupère les coûts des bâtiments
 const costs = computed(() => gridStore.buildingCosts);
@@ -87,7 +94,9 @@ const canAfford = (building) => {
     resourceStore.wood >= cost.wood &&
     resourceStore.stone >= cost.stone &&
     resourceStore.food >= cost.food &&
-    resourceStore.gold >= cost.gold
+    resourceStore.gold >= cost.gold &&
+    resourceStore.luxuryGoods >= cost.luxuryGoods &&
+    resourceStore.manufacturedGoods >= cost.manufacturedGoods
   );
 };
 
@@ -152,7 +161,7 @@ const selectBuilding = (type) => {
 .submenu-button {
   @apply bg-gray-100 p-2 rounded-lg shadow hover:bg-gray-200 transition flex flex-col items-center;
   width: 50px;
-  height: 60px;
+  height: auto;
   margin: 4px;
 }
 </style>

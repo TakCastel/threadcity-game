@@ -9,11 +9,14 @@ export const useGridStore = defineStore('grid', {
 
      // 📌 Mise à jour des coûts de construction
      buildingCosts: {
-      house: { wood: 3, stone: 0, food: 0, gold: 0 },      // 🛖 3 bois
-      seed: { wood: 0, stone: 0, food: 0, gold: 1 },      // 🌱 1 or
-      sapling: { wood: 0, stone: 0, food: 0, gold: 3 },   // 🌿 3 or
-      factory: { wood: 5, stone: 0, food: 0, gold: 0 },   // 🏭 5 bois
-      market: { wood: 7, stone: 0, food: 0, gold: 0 },    // 🏪 7 bois
+      house: { wood: 3, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 0 },      // 🛖 3 bois
+      seed: { wood: 0, stone: 0, food: 0, gold: 1, luxuryGoods: 0, manufacturedGoods: 0 },      // 🌱 1 or
+      sapling: { wood: 0, stone: 0, food: 0, gold: 3, luxuryGoods: 0, manufacturedGoods: 0 },   // 🌿 3 or
+      factory: { wood: 5, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 0 },   // 🏭 5 bois
+      market: { wood: 7, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 0 },    // 🏪 7 bois
+      industries: { wood: 7, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 10 },
+      lotissements : { wood: 6, stone: 0, food: 0, gold: 0, luxuryGoods: 12 },
+      building : { wood: 12, stone: 0, food: 0, gold: 0, manufacturedGoods: 5 },
     },
   }),
 

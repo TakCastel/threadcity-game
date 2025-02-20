@@ -40,29 +40,50 @@ export const useResourceStore = defineStore('resources', {
     startEconomy() {
       setInterval(() => {
         this.updateEconomy();
-      }, 20000); // 🔄 Mise à jour toutes les 5 secondes
+      }, 10000); // 🔄 Mise à jour toutes les 5 secondes
     },
 
     updateEconomy() {
       const gridStore = useGridStore();
-      let houseCount = 0, factoryCount = 0, storeCount = 0;
-
-      // 📌 Compte les bâtiments placés
+    
+      // 📌 Initialisation des compteurs
+      let houseCount = 0, lotissementCount = 0, buildingCount = 0;
+      let factoryCount = 0, industryCount = 0, storeCount = 0;
+    
+      // 📌 Compter les bâtiments
       gridStore.world.forEach(cell => {
+        if (!cell || !cell.item) return; // 🔹 Évite les erreurs sur undefined
+    
         if (cell.item === "house") houseCount++;
+        if (cell.item === "lotissements") lotissementCount++;
+        if (cell.item === "buildings") buildingCount++;
         if (cell.item === "factory") factoryCount++;
-        if (cell.item === "market-stall") storeCount++;
+        if (cell.item === "industry") industryCount++;
+        if (cell.item === "store") storeCount++;
       });
-
-      // 📌 Applique les effets économiques
+    
+      // 📌 Appliquer les effets économiques
       this.addResource("gold", houseCount * 1);
       this.removeResource("food", houseCount * 1);
+    
+      this.addResource("gold", lotissementCount * 5);
+      this.removeResource("food", lotissementCount * 2);
+    
+      this.addResource("gold", buildingCount * 10);
+      this.removeResource("food", buildingCount * 4);
+    
       this.addResource("manufacturedGoods", factoryCount * 3);
       this.removeResource("gold", factoryCount * 1);
+    
+      this.addResource("stone", industryCount * 3);
+      this.removeResource("manufacturedGoods", industryCount * 5);
+    
       this.addResource("gold", storeCount * 3);
-      this.removeResource("manufacturedGoods", storeCount * 1);
-
-      console.log(`🔄 Économie mise à jour ! H: ${houseCount}, U: ${factoryCount}, M: ${storeCount}`);
-    },
+      this.removeResource("luxuryGoods", storeCount * 1);
+    
+      console.log(`🔄 Économie mise à jour !
+        🏠 Maisons: ${houseCount}, 🏘️ Lotissements: ${lotissementCount}, 🏢 Immeubles: ${buildingCount}
+        🏭 Usines: ${factoryCount}, 🏗️ Industries: ${industryCount}, 🏪 Magasins: ${storeCount}`);
+    }    
   },
 });
