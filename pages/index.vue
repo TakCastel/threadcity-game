@@ -6,6 +6,7 @@
       <Bulldozer />
       <ResetButton />
     </div>
+
     <BuildingMenu />
   </template>
   

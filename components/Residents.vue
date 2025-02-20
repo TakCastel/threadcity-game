@@ -63,8 +63,12 @@ onMounted(() => {
 /* 📌 Positionnement absolu pour se déplacer librement sur la grille */
 .resident {
   position: absolute;
-  transition: transform 0.5s ease-in-out;
+  width: 5px; /* Correspond à la taille d'une case */
+  height: 5px;
+  transition: transform 0.5s linear; /* Ajuste la vitesse du mouvement */
+  z-index: 10; /* Toujours au-dessus des autres éléments */
 }
+
 
 /* 📌 Animation d'apparition */
 .resident-enter-active,

@@ -13,8 +13,8 @@ export const useGridStore = defineStore('grid', {
       lotissements: { wood: 10, stone: 0, food: 0, gold: 0, luxuryGoods: 6, manufacturedGoods: 0 },
       building: { wood: 20, stone: 6, food: 0, gold: 0, luxuryGoods: 12, manufacturedGoods: 15 },
 
-      seed: { wood: 0, stone: 0, food: 0, gold: 2, luxuryGoods: 0, manufacturedGoods: 0 },      
-      sapling: { wood: 0, stone: 0, food: 0, gold: 5, luxuryGoods: 0, manufacturedGoods: 0 },  
+      seed: { wood: 0, stone: 0, food: 0, gold: 1, luxuryGoods: 0, manufacturedGoods: 0 },      
+      sapling: { wood: 0, stone: 0, food: 0, gold: 2, luxuryGoods: 0, manufacturedGoods: 0 },  
 
       factory: { wood: 25, stone: 0, food: 0, gold: 5, luxuryGoods: 0, manufacturedGoods: 0 },   
       industries: { wood: 50, stone: 0, food: 0, gold: 100, luxuryGoods: 0, manufacturedGoods: 18 },
@@ -90,8 +90,8 @@ export const useGridStore = defineStore('grid', {
       const resourceStore = useResourceStore();
 
       const treeRewards = {
-        pine: 3, // 🌲 Sapin → 3 bois
-        tree: 5, // 🌳 Arbre → 5 bois
+        pine: 5, // 🌲 Sapin → 3 bois
+        tree: 15, // 🌳 Arbre → 5 bois
         palm: 10, // 🌴 Palmier → 7 bois
       };
 

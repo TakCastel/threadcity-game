@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed bottom-4 left-4 flex space-x-2">
+  <div class="fixed z-10 bottom-4 left-4 flex space-x-2">
     <!-- Boutons principaux -->
     <button v-for="(category, index) in categories" :key="category.name"
       @click.stop="toggleMenu(category.name, index)"

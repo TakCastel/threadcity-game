@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed top-4 left-4 mr-4 ">
+  <div class="fixed z-10 top-4 left-4 mr-4 ">
     <div class="bg-white p-4 rounded-lg shadow-md flex flex-wrap space-x-4">
       <div class="flex items-center space-x-2" :class="{ 'resource-decrease': decreasing.wood, 'resource-increase': increasing.wood }">
         <Icon name="fluent-emoji:wood" style="font-size: 24px;" />

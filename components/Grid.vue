@@ -105,3 +105,21 @@ const handleClick = (index) => {
 
 </script>
 
+<style>
+.building {
+  position: relative;
+  background-color: #8b5cf6; /* Exemple de couleur */
+}
+
+.building::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border: 4px solid #555; /* Couleur de la route */
+  border-radius: 4px; /* Coins arrondis pour un effet plus doux */
+  z-index: -1;
+}
+</style>
