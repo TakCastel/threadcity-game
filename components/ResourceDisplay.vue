@@ -4,6 +4,7 @@
       <Icon name="fluent-emoji:wood" style="font-size: 24px;" />
       <span>{{ resourceStore.wood }}</span>
     </div>
+    
     <div class="flex items-center space-x-2" :class="{ 'resource-decrease': decreasing.stone, 'resource-increase': increasing.stone }">
       <Icon name="fluent-emoji:rock" style="font-size: 24px;" />
       <span>{{ resourceStore.stone }}</span>
