@@ -142,9 +142,9 @@ export const useGridStore = defineStore('grid', {
       
       // 🌱 Si c'est une plante, activer le cooldown de croissance
       if (this.selectedBuilding === "sapling") {
-        this.world[index] = { ...this.world[index], cooldown: 60000 }; // 🌿 10 secondes avant de devenir un arbre
+        this.world[index] = { ...this.world[index], cooldown: 60 }; // 🌿 10 secondes avant de devenir un arbre
       } else if (this.selectedBuilding === "seed") {
-        this.world[index] = { ...this.world[index], cooldown: 30000 }; // 🌾 5 secondes avant de devenir un champ de blé
+        this.world[index] = { ...this.world[index], cooldown: 30 }; // 🌾 5 secondes avant de devenir un champ de blé
       }
 
       this.saveWorld();
@@ -161,6 +161,7 @@ export const useGridStore = defineStore('grid', {
       this.world.forEach((cell) => {
         if (cell.cooldown > 0) {
           cell.cooldown--; // ⏳ Diminue le cooldown
+          console.log(cell.cooldown)
           
           if (cell.cooldown === 0) {
             // 🌱 Transformation des plantes
@@ -193,37 +194,52 @@ export const useGridStore = defineStore('grid', {
         terrain: "plains",
       }));
 
-      this.createRiver();
+      this.createWater();
       this.placeBeaches();
       this.placeTrees();
       this.saveWorld();
     },
 
-    // 🌊 Génération de rivières logiques
-    createRiver() {
-      let x = Math.floor(Math.random() * this.size * 0.7) + Math.floor(this.size * 0.15);
-      let y = 0;
+    // 🏝️ Génération d'une île avec une bordure d'eau plus naturelle
+    createWater() {
+      // Fonction pour générer une profondeur d'eau avec une distribution pondérée
+      const getRandomWaterDepth = () => {
+        const roll = Math.random();
+        if (roll < 0.5) return 1; // 🎲 50% de chance d'avoir 0 (pas d'eau)
+        if (roll < 0.9) return 2; // 🎲 30% de chance d'avoir 1 case d'eau
+        if (roll < 0.99) return 3; // 🎲 15% de chance d'avoir 2 cases d'eau
+        return 0; // 🎲 5% de chance d'avoir 3 cases d'eau
+      };
 
-      for (let i = 0; i < this.size * 1.2; i++) {
-        const index = y * this.size + x;
-        if (index >= 0 && index < this.world.length) {
-          this.world[index].terrain = "water";
+      let topWater = [];
+      let bottomWater = [];
+      let leftWater = [];
+      let rightWater = [];
 
-          if (Math.random() > 0.2 && x > 0) this.world[y * this.size + (x - 1)].terrain = "water";
-          if (Math.random() > 0.2 && x < this.size - 1) this.world[y * this.size + (x + 1)].terrain = "water";
-          if (Math.random() > 0.85) {
-            if (x > 1) this.world[y * this.size + (x - 2)].terrain = "water";
-            if (x < this.size - 2) this.world[y * this.size + (x + 2)].terrain = "water";
+      for (let x = 0; x < this.size; x++) {
+        topWater[x] = getRandomWaterDepth();
+        bottomWater[x] = getRandomWaterDepth();
+      }
+
+      for (let y = 0; y < this.size; y++) {
+        leftWater[y] = getRandomWaterDepth();
+        rightWater[y] = getRandomWaterDepth();
+      }
+
+      // 🔄 Appliquer l'eau autour de la carte
+      for (let y = 0; y < this.size; y++) {
+        for (let x = 0; x < this.size; x++) {
+          if (
+            y < topWater[x] || // Eau en haut, dépendant de chaque colonne
+            y >= this.size - bottomWater[x] || // Eau en bas, dépendant de chaque colonne
+            x < leftWater[y] || // Eau à gauche, dépendant de chaque ligne
+            x >= this.size - rightWater[y] // Eau à droite, dépendant de chaque ligne
+          ) {
+            this.world[y * this.size + x].terrain = "water";
+          } else {
+            this.world[y * this.size + x].terrain = "plains"; // Terre au centre
           }
         }
-
-        const move = Math.random();
-        if (move < 0.3 && x > 1) x--;
-        else if (move < 0.6 && x < this.size - 2) x++;
-        else if (move < 0.8 && y < this.size - 2) y++;
-        else y++;
-
-        if (y >= this.size) break;
       }
     },
 
