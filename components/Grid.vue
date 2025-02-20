@@ -33,6 +33,8 @@
         <Icon v-if="cell.item === 'lotissements'" name="fluent-emoji:houses" class="absolute w-full h-full" />
         <Icon v-if="cell.item === 'building'" name="fluent-emoji:office-building" class="absolute w-full h-full" />
 
+        <Icon v-if="cell.item === 'monument'" name="fluent-emoji:bank" class="absolute w-full h-full" />
+
         <!-- Affichage des montagnes -->
         <Icon v-if="cell.item === 'mountain'" name="fluent-emoji:mountain" class="absolute w-full h-full" />
         <Icon v-if="cell.item === 'snowy-mountain'" name="fluent-emoji:snow-capped-mountain" class="absolute w-full h-full" />

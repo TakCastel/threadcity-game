@@ -19,7 +19,9 @@ export const useGridStore = defineStore('grid', {
       factory: { wood: 25, stone: 0, food: 0, gold: 5, luxuryGoods: 0, manufacturedGoods: 0 },   
       industries: { wood: 50, stone: 0, food: 0, gold: 100, luxuryGoods: 0, manufacturedGoods: 18 },
 
-      market: { wood: 10, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 6 },    
+      market: { wood: 10, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 6 }, 
+      
+      monument: { wood: 0, stone: 50, food: 0, gold: 100, luxuryGoods: 0, manufacturedGoods: 0 },  
     }
   }),
 
@@ -130,6 +132,7 @@ export const useGridStore = defineStore('grid', {
 
     // 🏗️ Placer un bâtiment ou une plante
     placeBuilding(x, y) {
+      const resourceStore = useResourceStore();
       const index = y * this.size + x;
 
       if (!this.selectedBuilding) return;
@@ -145,6 +148,12 @@ export const useGridStore = defineStore('grid', {
         console.log("Pas assez de ressources !");
         this.selectedBuilding = null;
         return;
+      }
+
+      console.log(this.selectedBuilding)
+      if (this.selectedBuilding === 'monument') {
+        console.log('coucou')
+        resourceStore.addResource("score", 10000);
       }
 
       this.payForBuilding(this.selectedBuilding); // 🔹 Retirer les ressources
