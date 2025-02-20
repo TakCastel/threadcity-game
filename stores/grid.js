@@ -8,16 +8,16 @@ export const useGridStore = defineStore('grid', {
     selectedBuilding: null, // 🔹 Stocke le bâtiment en cours de placement
 
      // 📌 Mise à jour des coûts de construction
-     buildingCosts: {
-      house: { wood: 5, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 0 },      // 🛖 3 bois
-      seed: { wood: 0, stone: 0, food: 0, gold: 1, luxuryGoods: 0, manufacturedGoods: 0 },      // 🌱 1 or
-      sapling: { wood: 0, stone: 0, food: 0, gold: 3, luxuryGoods: 0, manufacturedGoods: 0 },   // 🌿 3 or
-      factory: { wood: 10, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 0 },   // 🏭 5 bois
-      market: { wood: 20, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 0 },    // 🏪 7 bois
-      industries: { wood: 50, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 10 },
-      lotissements : { wood: 10, stone: 0, food: 0, gold: 0, luxuryGoods: 12, manufacturedGoods: 0 },
-      building : { wood: 15, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 5 },
-    },
+     buildingCosts : {
+      house: { wood: 5, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 0 },      
+      lotissements: { wood: 15, stone: 0, food: 0, gold: 0, luxuryGoods: 5, manufacturedGoods: 0 },
+      building: { wood: 0, stone: 5, food: 0, gold: 0, luxuryGoods: 10, manufacturedGoods: 25 },
+      seed: { wood: 0, stone: 0, food: 0, gold: 2, luxuryGoods: 0, manufacturedGoods: 0 },      
+      sapling: { wood: 0, stone: 0, food: 0, gold: 5, luxuryGoods: 0, manufacturedGoods: 0 },   
+      factory: { wood: 15, stone: 0, food: 0, gold: 15, luxuryGoods: 0, manufacturedGoods: 0 },   
+      industries: { wood: 10, stone: 0, food: 0, gold: 30, luxuryGoods: 0, manufacturedGoods: 15 },
+      market: { wood: 25, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 10 },    
+    }
   }),
 
   actions: {
@@ -87,7 +87,7 @@ export const useGridStore = defineStore('grid', {
       const resourceStore = useResourceStore();
 
       const treeRewards = {
-        pine: 2, // 🌲 Sapin → 3 bois
+        pine: 3, // 🌲 Sapin → 3 bois
         tree: 5, // 🌳 Arbre → 5 bois
         palm: 10, // 🌴 Palmier → 7 bois
       };
@@ -107,10 +107,10 @@ export const useGridStore = defineStore('grid', {
       const index = y * this.size + x;
       const resourceStore = useResourceStore();
       
-      resourceStore.addResource("food", 100); // 🪓 Ajouter le bois
+      resourceStore.addResource("food", 12); // 🪓 Ajouter le bois
       this.world[index].item = "empty"; // ❌ Supprime l’arbre
       this.saveWorld();
-      console.log(`🌾 +100 nourriture récupérées !`);
+      console.log(`🌾 +12 nourriture récupérées !`);
     },
 
     payForBuilding(building) {

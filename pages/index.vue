@@ -3,9 +3,6 @@
     <ResetButton />
     <ResourceDisplay />
     <BuildingMenu />
-
-
-
   </template>
   
   <script setup>

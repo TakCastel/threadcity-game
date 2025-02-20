@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full overflow-auto flex items-center justify-center">
+  <div class="w-full h-full overflow-auto">
     <div
       class="grid"
       :style="{

@@ -9,10 +9,10 @@
     </button>
 
     <!-- Modale de confirmation -->
-    <div v-if="showModal" class="fixed z-20 inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center">
+    <div v-if="showModal" class="fixed z-30 inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center">
       <div class="bg-white rounded-2xl shadow-xl w-[90%] md:w-96 p-6 border border-gray-200">
         <p class="text-gray-800 text-lg font-medium text-center mb-6">
-          Êtes-vous sûr de vouloir tout effacer ?<br />Cette action est irréversible.
+          Êtes-vous sûr de vouloir tout recommencer ?<br />Cette action est irréversible.
         </p>
         <div class="flex justify-center gap-4">
           <button @click="resetMap" class="px-6 py-3 bg-red-600 text-white rounded-xl shadow-md transition hover:bg-red-500">
