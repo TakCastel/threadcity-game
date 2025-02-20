@@ -9,6 +9,8 @@
     >
       <Icon :name="category.icon" style="color: white; font-size: 24px;" />
     </button>
+
+    <Bulldozer />
   </div>
 
   <!-- Sous-menu avec les coûts -->
@@ -53,7 +55,9 @@
 import { ref, computed, nextTick } from 'vue';
 import { useGridStore } from '@/stores/grid';
 import { useResourceStore } from '@/stores/resources';
+import { useNotificationStore } from "@/stores/notification";
 
+const notificationStore = useNotificationStore();
 const gridStore = useGridStore();
 const resourceStore = useResourceStore();
 const activeMenu = ref(null);
@@ -70,7 +74,7 @@ const categories = [
 const buildings = {
   residential: [
     { type: 'building', icon: 'fluent:city-24-regular' }, // Immeuble
-    { type: 'lotissements', icon: 'fluent:building-24-regular' }, // Lotissement / regroupement de bâtiments
+    { type: 'lotissements', icon: 'fluent:building-24-regular' }, // Lotissements / regroupement de bâtiments
     { type: 'house', icon: 'fluent:home-24-regular' }, // Maison standard
   ],
   industry: [
@@ -90,6 +94,7 @@ const costs = computed(() => gridStore.buildingCosts);
 // 📌 Vérifie si le joueur a assez de ressources
 const canAfford = (building) => {
   const cost = costs.value[building];
+  
   return (
     resourceStore.wood >= cost.wood &&
     resourceStore.stone >= cost.stone &&
@@ -120,7 +125,7 @@ const toggleMenu = async (menu, index) => {
 // 📌 Sélectionner un bâtiment
 const selectBuilding = (type) => {
   if (!costs.value[type]) {
-    console.log(`❌ Le bâtiment "${type}" n'a pas de coût défini !`);
+    notificationStore.addNotification(`❌ Le bâtiment "${type}" n'a pas de coût défini !`);
     return;
   }
 
@@ -128,7 +133,7 @@ const selectBuilding = (type) => {
     gridStore.selectedBuilding = type;
     activeMenu.value = null;
   } else {
-    console.log(`❌ Pas assez de ressources pour construire "${type}"`);
+    notificationStore.addNotification(`Pas assez de ressources pour construire "${type}"`, 'warning');
   }
 };
 

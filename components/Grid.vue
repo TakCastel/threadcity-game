@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full overflow-auto">
+  <div class="w-full h-full overflow-auto flex items-center justify-center">
     <div
       class="grid"
       :style="{
@@ -10,7 +10,7 @@
       <div
         v-for="(cell, index) in gridStore.world"
         :key="index"
-        class="relative flex items-center justify-center"
+        class="relative flex items-center justify-center hover:opacity-90"
         :class="getTerrainClass(cell.terrain)"
         :style="{ width: `${cellSize}px`, height: `${cellSize}px` }"
         @click="handleClick(index)"
@@ -28,7 +28,10 @@
         <!-- Affichage des bâtiments placés -->
         <Icon v-if="cell.item === 'house'" name="fluent-emoji:house" class="absolute w-3/4 h-3/4" />
         <Icon v-if="cell.item === 'factory'" name="fluent-emoji:factory" class="absolute w-full h-full" />
+        <Icon v-if="cell.item === 'industries'" name="fluent-emoji:building-construction" class="absolute w-full h-full" />
         <Icon v-if="cell.item === 'market'" name="fluent-color:building-store-20" class="absolute w-3/4 h-3/4" />
+        <Icon v-if="cell.item === 'lotissements'" name="fluent-emoji:houses" class="absolute w-full h-full" />
+        <Icon v-if="cell.item === 'building'" name="fluent-emoji:office-building" class="absolute w-full h-full" />
 
         <!-- Affichage des montagnes -->
         <Icon v-if="cell.item === 'mountain'" name="fluent-emoji:mountain" class="absolute w-full h-full" />
@@ -75,6 +78,18 @@ const handleClick = (index) => {
   const y = Math.floor(index / gridStore.size);
 
   const cell = gridStore.world[index];
+
+    // 🏗️ Si le mode bulldozer est activé, supprimer sauf montagnes
+    if (gridStore.isBulldozing) {
+      if (["mountain", "snowy-mountain", "palm", "tree", "pine"].includes(cell.item)) {
+        console.log("🚧 Impossible de détruire cela !");
+        return;
+      }
+      gridStore.world[index].item = "empty";
+      gridStore.saveWorld();
+      console.log("🚜 Bulldozer utilisé !");
+      return;
+    }
 
   // 🪓 Si c'est un arbre, on le coupe
   if (["tree", "palm", "pine"].includes(cell.item)) {

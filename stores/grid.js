@@ -9,14 +9,14 @@ export const useGridStore = defineStore('grid', {
 
      // 📌 Mise à jour des coûts de construction
      buildingCosts: {
-      house: { wood: 3, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 0 },      // 🛖 3 bois
+      house: { wood: 5, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 0 },      // 🛖 3 bois
       seed: { wood: 0, stone: 0, food: 0, gold: 1, luxuryGoods: 0, manufacturedGoods: 0 },      // 🌱 1 or
       sapling: { wood: 0, stone: 0, food: 0, gold: 3, luxuryGoods: 0, manufacturedGoods: 0 },   // 🌿 3 or
-      factory: { wood: 5, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 0 },   // 🏭 5 bois
-      market: { wood: 7, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 0 },    // 🏪 7 bois
-      industries: { wood: 7, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 10 },
-      lotissements : { wood: 6, stone: 0, food: 0, gold: 0, luxuryGoods: 12 },
-      building : { wood: 12, stone: 0, food: 0, gold: 0, manufacturedGoods: 5 },
+      factory: { wood: 10, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 0 },   // 🏭 5 bois
+      market: { wood: 20, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 0 },    // 🏪 7 bois
+      industries: { wood: 50, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 10 },
+      lotissements : { wood: 10, stone: 0, food: 0, gold: 0, luxuryGoods: 12, manufacturedGoods: 0 },
+      building : { wood: 15, stone: 0, food: 0, gold: 0, luxuryGoods: 0, manufacturedGoods: 5 },
     },
   }),
 
@@ -48,7 +48,9 @@ export const useGridStore = defineStore('grid', {
         resourceStore.wood >= (cost.wood || 0) &&
         resourceStore.stone >= (cost.stone || 0) &&
         resourceStore.food >= (cost.food || 0) &&
-        resourceStore.gold >= (cost.gold || 0)
+        resourceStore.gold >= (cost.gold || 0) &&
+        resourceStore.luxuryGoods >= (cost.luxuryGoods || 0) &&
+        resourceStore.manufacturedGoods >= (cost.manufacturedGoods || 0) 
       );
     },
 
@@ -85,9 +87,9 @@ export const useGridStore = defineStore('grid', {
       const resourceStore = useResourceStore();
 
       const treeRewards = {
-        pine: 3, // 🌲 Sapin → 3 bois
+        pine: 2, // 🌲 Sapin → 3 bois
         tree: 5, // 🌳 Arbre → 5 bois
-        palm: 7, // 🌴 Palmier → 7 bois
+        palm: 10, // 🌴 Palmier → 7 bois
       };
 
       const treeType = this.world[index].item;
@@ -105,10 +107,10 @@ export const useGridStore = defineStore('grid', {
       const index = y * this.size + x;
       const resourceStore = useResourceStore();
       
-      resourceStore.addResource("food", 10); // 🪓 Ajouter le bois
+      resourceStore.addResource("food", 100); // 🪓 Ajouter le bois
       this.world[index].item = "empty"; // ❌ Supprime l’arbre
       this.saveWorld();
-      console.log(`🌾 +10 nourriture récupérées !`);
+      console.log(`🌾 +100 nourriture récupérées !`);
     },
 
     payForBuilding(building) {
@@ -119,6 +121,8 @@ export const useGridStore = defineStore('grid', {
       resourceStore.removeResource("stone", cost.stone);
       resourceStore.removeResource("food", cost.food);
       resourceStore.removeResource("gold", cost.gold);
+      resourceStore.removeResource("luxuryGoods", cost.luxuryGoods);
+      resourceStore.removeResource("manufacturedGoods", cost.manufacturedGoods);
     },
 
     // 🏗️ Placer un bâtiment ou une plante
@@ -135,7 +139,7 @@ export const useGridStore = defineStore('grid', {
         return;
       }
       if (!this.canAffordBuilding(this.selectedBuilding)) {
-        console.log("❌ Pas assez de ressources !");
+        console.log("Pas assez de ressources !");
         this.selectedBuilding = null;
         return;
       }
@@ -168,17 +172,24 @@ export const useGridStore = defineStore('grid', {
           if (cell.cooldown === 0) {
             // 🌱 Transformation des plantes
             if (cell.item === "sapling") {
-              cell.item = "tree"; // 🌳 Transformation en arbre
-              console.log("🌳 Une pousse est devenue un arbre !");
-            } else if (cell.item === "seed") {
+              if (cell.terrain === "sand") {
+                cell.item = "palm"; // 🌴 Transformation en palmier sur le sable
+              } else {
+                cell.item = "pine"; // 🌲 Transformation en sapin ailleurs
+              }
+              console.log("🌱 Une pousse a grandi en :", cell.item);
+            } 
+            else if (cell.item === "seed") {
               cell.item = "wheat-field"; // 🌾 Transformation en champ de blé
               console.log("🌾 Une graine est devenue un champ de blé !");
             }
+  
             this.saveWorld();
           }
         }
       });
     },
+    
 
     // ⏳ Lancer la mise à jour automatique du cooldown
     startCooldownLoop() {

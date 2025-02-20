@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed z-10 top-4 right-4 bg-white p-4 rounded-lg shadow-md flex space-x-4">
+  <div class="fixed z-10 top-4 left-4 mr-4 bg-white p-4 rounded-lg shadow-md flex flex-wrap space-x-4">
     <div class="flex items-center space-x-2" :class="{ 'resource-decrease': decreasing.wood, 'resource-increase': increasing.wood }">
       <Icon name="fluent-emoji:wood" style="font-size: 24px;" />
       <span>{{ resourceStore.wood }}</span>
@@ -32,6 +32,7 @@ import { ref, watch } from 'vue';
 import { useResourceStore } from '@/stores/resources';
 
 const resourceStore = useResourceStore();
+
 const decreasing = ref({ 
   wood: false, 
   stone: false, 
@@ -40,6 +41,7 @@ const decreasing = ref({
   manufacturedGoods: false, 
   luxuryGoods: false 
 });
+
 const increasing = ref({ 
   wood: false, 
   stone: false, 
