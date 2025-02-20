@@ -161,7 +161,6 @@ export const useGridStore = defineStore('grid', {
       this.world.forEach((cell) => {
         if (cell.cooldown > 0) {
           cell.cooldown--; // ⏳ Diminue le cooldown
-          console.log(cell.cooldown)
           
           if (cell.cooldown === 0) {
             // 🌱 Transformation des plantes
@@ -196,6 +195,7 @@ export const useGridStore = defineStore('grid', {
 
       this.createWater();
       this.placeBeaches();
+      this.createMountains();
       this.placeTrees();
       this.saveWorld();
     },
@@ -263,6 +263,30 @@ export const useGridStore = defineStore('grid', {
         const index = y * this.size + x;
         if (this.world[index].terrain === "plains") {
           this.world[index].terrain = "sand";
+        }
+      }
+    },
+
+    // ⛰️ Génération de montagnes normales et enneigées au centre
+    createMountains() {
+      const centerX = Math.floor(this.size / 2);
+      const centerY = Math.floor(this.size / 2);
+      const maxDistance = this.size * 0.25; // Rayon où les montagnes peuvent apparaître
+
+      for (let y = 0; y < this.size; y++) {
+        for (let x = 0; x < this.size; x++) {
+          const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+          
+          if (distance < maxDistance) {
+            const probability = 1 - (distance / maxDistance); // Plus on est proche du centre, plus la proba augmente
+
+            if (Math.random() < probability * 0.5) { // 🌄 Ajout progressif des montagnes normales
+              this.world[y * this.size + x].item = "mountain";
+            }
+            if (Math.random() < probability * 0.3 && distance < maxDistance * 0.6) { // 🏔️ Ajout de montagnes enneigées
+              this.world[y * this.size + x].item = "snowy-mountain";
+            }
+          }
         }
       }
     },

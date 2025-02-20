@@ -29,6 +29,10 @@
         <Icon v-if="cell.item === 'house'" name="fluent-emoji:house" class="absolute w-3/4 h-3/4" />
         <Icon v-if="cell.item === 'factory'" name="fluent-emoji:factory" class="absolute w-full h-full" />
         <Icon v-if="cell.item === 'market'" name="fluent-color:building-store-20" class="absolute w-3/4 h-3/4" />
+
+        <!-- Affichage des montagnes -->
+        <Icon v-if="cell.item === 'mountain'" name="fluent-emoji:mountain" class="absolute w-full h-full" />
+        <Icon v-if="cell.item === 'snowy-mountain'" name="fluent-emoji:snow-capped-mountain" class="absolute w-full h-full" />
       </div>
     </div>
   </div>
