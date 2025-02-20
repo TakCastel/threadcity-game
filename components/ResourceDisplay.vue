@@ -26,12 +26,12 @@
     </div>
 
     <!-- 📌 Affichage du score -->
-    <div class="absolute top-16 -left-4 text-white text-lg">
+    <div class="absolute top-16 -left-4 text-xs bg-white px-2 rounded-lg shadow-md">
       Score : {{ formattedScore }}
     </div>
 
     <!-- 📌 Affichage du bonheur -->
-    <div class="absolute top-24 -left-4 text-white text-lg">
+    <div class="absolute top-[7.25em] -left-4 text-xs bg-white px-2 rounded-lg shadow-md">
       Bonheur : {{ resourceStore.happiness }}
     </div>
   </div>
