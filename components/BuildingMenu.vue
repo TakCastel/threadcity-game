@@ -9,8 +9,6 @@
     >
       <Icon :name="category.icon" style="color: white; font-size: 24px;" />
     </button>
-
-    <Bulldozer />
   </div>
 
   <!-- Sous-menu avec les coûts -->

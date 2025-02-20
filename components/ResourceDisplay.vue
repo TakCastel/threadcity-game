@@ -1,39 +1,43 @@
 <template>
-  <div class="fixed z-10 top-4 left-4 mr-4 bg-white p-4 rounded-lg shadow-md flex flex-wrap space-x-4">
-    <div class="flex items-center space-x-2" :class="{ 'resource-decrease': decreasing.wood, 'resource-increase': increasing.wood }">
-      <Icon name="fluent-emoji:wood" style="font-size: 24px;" />
-      <span>{{ resourceStore.wood }}</span>
-    </div>
-    
-    <div class="flex items-center space-x-2" :class="{ 'resource-decrease': decreasing.stone, 'resource-increase': increasing.stone }">
-      <Icon name="fluent-emoji:rock" style="font-size: 24px;" />
-      <span>{{ resourceStore.stone }}</span>
-    </div>
-    <div class="flex items-center space-x-2" :class="{ 'resource-decrease': decreasing.food, 'resource-increase': increasing.food }">
-      <Icon name="fluent-emoji:ear-of-corn" style="font-size: 24px;" />
-      <span>{{ resourceStore.food }}</span>
-    </div>
-    <div class="flex items-center space-x-2" :class="{ 'resource-decrease': decreasing.manufacturedGoods, 'resource-increase': increasing.manufacturedGoods }">
-      <Icon name="fluent-emoji:gear" style="font-size: 24px;" />
-      <span>{{ resourceStore.manufacturedGoods }}</span>
-    </div>
-    <div class="flex items-center space-x-2" :class="{ 'resource-decrease': decreasing.luxuryGoods, 'resource-increase': increasing.luxuryGoods }">
-      <Icon name="fluent-emoji:handbag" style="font-size: 24px;" />
-      <span>{{ resourceStore.luxuryGoods }}</span>
-    </div>
-    <div class="flex items-center space-x-2" :class="{ 'resource-decrease': decreasing.gold, 'resource-increase': increasing.gold }">
-      <Icon name="fluent-emoji:coin" style="font-size: 24px;" />
-      <span>{{ resourceStore.gold }}</span>
+  <div class="fixed top-4 left-4 mr-4 ">
+    <div class="bg-white p-4 rounded-lg shadow-md flex flex-wrap space-x-4">
+      <div class="flex items-center space-x-2" :class="{ 'resource-decrease': decreasing.wood, 'resource-increase': increasing.wood }">
+        <Icon name="fluent-emoji:wood" style="font-size: 24px;" />
+        <span>{{ resourceStore.wood }}</span>
+      </div>
+
+      <div class="flex items-center space-x-2" :class="{ 'resource-decrease': decreasing.stone, 'resource-increase': increasing.stone }">
+        <Icon name="fluent-emoji:rock" style="font-size: 24px;" />
+        <span>{{ resourceStore.stone }}</span>
+      </div>
+      <div class="flex items-center space-x-2" :class="{ 'resource-decrease': decreasing.food, 'resource-increase': increasing.food }">
+        <Icon name="fluent-emoji:ear-of-corn" style="font-size: 24px;" />
+        <span>{{ resourceStore.food }}</span>
+      </div>
+      <div class="flex items-center space-x-2" :class="{ 'resource-decrease': decreasing.manufacturedGoods, 'resource-increase': increasing.manufacturedGoods }">
+        <Icon name="fluent-emoji:gear" style="font-size: 24px;" />
+        <span>{{ resourceStore.manufacturedGoods }}</span>
+      </div>
+      <div class="flex items-center space-x-2" :class="{ 'resource-decrease': decreasing.luxuryGoods, 'resource-increase': increasing.luxuryGoods }">
+        <Icon name="fluent-emoji:handbag" style="font-size: 24px;" />
+        <span>{{ resourceStore.luxuryGoods }}</span>
+      </div>
+      <div class="flex items-center space-x-2" :class="{ 'resource-decrease': decreasing.gold, 'resource-increase': increasing.gold }">
+        <Icon name="fluent-emoji:coin" style="font-size: 24px;" />
+        <span>{{ resourceStore.gold }}</span>
+      </div>
     </div>
 
     <!-- 📌 Affichage du score -->
-    <div class="absolute top-16 -left-4 text-xs bg-white px-2 rounded-lg shadow-md">
-      Score : {{ formattedScore }}
-    </div>
-
-    <!-- 📌 Affichage du bonheur -->
-    <div class="absolute top-[7.25em] -left-4 text-xs bg-white px-2 rounded-lg shadow-md">
-      Bonheur : {{ resourceStore.happiness }}
+    <div class="absolute -bottom-8 left-0 flex gap-2">
+      <div class="text-xs bg-white px-2 py-1 rounded-lg shadow-md">
+        Score : {{ formattedScore }}
+      </div>
+  
+      <!-- 📌 Affichage du bonheur -->
+      <div class="text-xs bg-white px-2 py-1 rounded-lg shadow-md">
+        Bonheur : {{ resourceStore.happiness }}
+      </div>
     </div>
   </div>
 

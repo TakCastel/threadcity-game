@@ -1,12 +1,16 @@
 <template>
-    <button 
-      @click="toggleBulldozerMode"
-      class="bulldozer-button bg-gray-300"
-      :class="{ 'active': isBulldozing }"
-    >
-        <Icon name="mdi:bulldozer" style="color: white; font-size: 24px;" />
-    </button>
-  </template>
+  <button 
+    @click="toggleBulldozerMode"
+    class="flex items-center justify-center w-12 h-12 bg-white/80 backdrop-blur-lg border border-gray-300 text-gray-800 rounded-xl shadow-lg transition hover:bg-white hover:shadow-xl"
+    :class="{ 'bg-red-600 text-white': isBulldozing }"
+  >
+    <Icon name="mdi:bulldozer" style="font-size: 32px;" />
+  </button>
+
+  <div v-if="isBulldozing" class="fixed border border-8 border-red-500 w-full h-full z-10 inset-0 pointer-events-none">
+
+  </div>
+</template>
   
   <script setup>
   import { ref } from 'vue';
@@ -25,8 +29,6 @@
   <style scoped>
   .bulldozer-button {
     @apply p-3 rounded-lg shadow-md transition;
-    width: 50px;
-    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;

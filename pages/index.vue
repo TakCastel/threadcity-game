@@ -1,7 +1,11 @@
 <template>
     <Grid />
-    <ResetButton />
     <ResourceDisplay />
+    
+    <div class="fixed z-50 bottom-4 right-4 flex flex-col gap-3">
+      <Bulldozer />
+      <ResetButton />
+    </div>
     <BuildingMenu />
   </template>
   
